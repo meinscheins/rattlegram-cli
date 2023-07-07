@@ -59,6 +59,9 @@ int main(int argc, char **argv) {
                 case 16:
                     encoder = new(std::nothrow) Encoder<8000, 16>(&output_file);
                     break;
+                case 64:
+                    encoder = new(std::nothrow) Encoder<8000, 64>(&output_file);
+                    break;
                 default:
                     std::cerr << "Unsupported symbol mapping." ;
                     std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;

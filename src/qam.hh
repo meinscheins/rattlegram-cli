@@ -67,3 +67,120 @@ struct QAM<16, TYPE, CODE> {
         return ret;
 	}
 };
+
+template<typename TYPE, typename CODE>
+struct QAM<64, TYPE, CODE> {
+    static const int NUM = 64;
+	static const int BITS = 6;
+	typedef TYPE complex_type;
+	typedef typename TYPE::value_type value_type;
+	typedef CODE code_type;
+
+    static constexpr value_type LEVEL =  0.1543033499620919;
+    static constexpr value_type DIST = 2 * LEVEL;
+
+    static constexpr complex_type qam64[64] = {
+        complex_type(-7.0 * LEVEL, -7.0 * LEVEL),
+        complex_type(7.0 * LEVEL, -7.0 * LEVEL),
+        complex_type(-1.0 * LEVEL, -7.0 * LEVEL),
+        complex_type(1.0 * LEVEL, -7.0 * LEVEL),
+        complex_type(-5.0 * LEVEL, -7.0 * LEVEL),
+        complex_type(5.0 * LEVEL, -7.0 * LEVEL),
+        complex_type(-3.0 * LEVEL, -7.0 * LEVEL),
+        complex_type(3.0 * LEVEL, -7.0 * LEVEL),
+        complex_type(-7.0 * LEVEL, 7.0 * LEVEL),
+        complex_type(7.0 * LEVEL, 7.0 * LEVEL),
+        complex_type(-1.0 * LEVEL, 7.0 * LEVEL),
+        complex_type(1.0 * LEVEL, 7.0 * LEVEL),
+        complex_type(-5.0 * LEVEL, 7.0 * LEVEL),
+        complex_type(5.0 * LEVEL, 7.0 * LEVEL),
+        complex_type(-3.0 * LEVEL, 7.0 * LEVEL),
+        complex_type(3.0 * LEVEL, 7.0 * LEVEL),
+        complex_type(-7.0 * LEVEL, -1.0 * LEVEL),
+        complex_type(7.0 * LEVEL, -1.0 * LEVEL),
+        complex_type(-1.0 * LEVEL, -1.0 * LEVEL),
+        complex_type(1.0 * LEVEL, -1.0 * LEVEL),
+        complex_type(-5.0 * LEVEL, -1.0 * LEVEL),
+        complex_type(5.0 * LEVEL, -1.0 * LEVEL),
+        complex_type(-3.0 * LEVEL, -1.0 * LEVEL),
+        complex_type(3.0 * LEVEL, -1.0 * LEVEL),
+        complex_type(-7.0 * LEVEL, 1.0 * LEVEL),
+        complex_type(7.0 * LEVEL, 1.0 * LEVEL),
+        complex_type(-1.0 * LEVEL, 1.0 * LEVEL),
+        complex_type(1.0 * LEVEL, 1.0 * LEVEL),
+        complex_type(-5.0 * LEVEL, 1.0 * LEVEL),
+        complex_type(5.0 * LEVEL, 1.0 * LEVEL),
+        complex_type(-3.0 * LEVEL, 1.0 * LEVEL),
+        complex_type(3.0 * LEVEL, 1.0 * LEVEL),
+        complex_type(-7.0 * LEVEL, -5.0 * LEVEL),
+        complex_type(7.0 * LEVEL, -5.0 * LEVEL),
+        complex_type(-1.0 * LEVEL, -5.0 * LEVEL),
+        complex_type(1.0 * LEVEL, -5.0 * LEVEL),
+        complex_type(-5.0 * LEVEL, -5.0 * LEVEL),
+        complex_type(5.0 * LEVEL, -5.0 * LEVEL),
+        complex_type(-3.0 * LEVEL, -5.0 * LEVEL),
+        complex_type(3.0 * LEVEL, -5.0 * LEVEL),
+        complex_type(-7.0 * LEVEL, 5.0 * LEVEL),
+        complex_type(7.0 * LEVEL, 5.0 * LEVEL),
+        complex_type(-1.0 * LEVEL, 5.0 * LEVEL),
+        complex_type(1.0 * LEVEL, 5.0 * LEVEL),
+        complex_type(-5.0 * LEVEL, 5.0 * LEVEL),
+        complex_type(5.0 * LEVEL, 5.0 * LEVEL),
+        complex_type(-3.0 * LEVEL, 5.0 * LEVEL),
+        complex_type(3.0 * LEVEL, 5.0 * LEVEL),
+        complex_type(-7.0 * LEVEL, -3.0 * LEVEL),
+        complex_type(7.0 * LEVEL, -3.0 * LEVEL),
+        complex_type(-1.0 * LEVEL, -3.0 * LEVEL),
+        complex_type(1.0 * LEVEL, -3.0 * LEVEL),
+        complex_type(-5.0 * LEVEL, -3.0 * LEVEL),
+        complex_type(5.0 * LEVEL, -3.0 * LEVEL),
+        complex_type(-3.0 * LEVEL, -3.0 * LEVEL),
+        complex_type(3.0 * LEVEL, -3.0 * LEVEL),
+        complex_type(-7.0 * LEVEL, 3.0 * LEVEL),
+        complex_type(7.0 * LEVEL, 3.0 * LEVEL),
+        complex_type(-1.0 * LEVEL, 3.0 * LEVEL),
+        complex_type(1.0 * LEVEL, 3.0 * LEVEL),
+        complex_type(-5.0 * LEVEL, 3.0 * LEVEL),
+        complex_type(5.0 * LEVEL, 3.0 * LEVEL),
+        complex_type(-3.0 * LEVEL, 3.0 * LEVEL),
+        complex_type(3.0 * LEVEL, 3.0 * LEVEL),
+    };
+
+	static code_type quantize(value_type precision, value_type value) {
+		value *= DIST * precision;
+		if (std::is_integral<code_type>::value)
+			value = std::nearbyint(value);
+		if (std::is_same<code_type, int8_t>::value)
+			value = std::min<value_type>(std::max<value_type>(value, -128), 127);
+		return value;
+	}
+
+    static void hard(code_type *b, complex_type c) {
+		b[0] = (c.real() > value_type(0)) ? code_type(1) : code_type(-1);
+        b[1] = (abs(c.real()) < 4 * LEVEL) ? code_type(1) : code_type(-1); 
+        b[2] = ((abs(c.real()) < 6 * LEVEL) && (abs(c.real()) > 2 * LEVEL)) ? code_type(1) : code_type(-1); 
+        b[3] = (c.imag() > value_type(0)) ? code_type(1) : code_type(-1); 
+        b[4] = (abs(c.imag()) < 4 * LEVEL ) ? code_type(1) : code_type(-1);
+        b[5] = b[2] = ((abs(c.real()) < 6 * LEVEL) && (abs(c.real()) > 2 * LEVEL)) ? code_type(1) : code_type(-1); 
+	}
+
+	static void soft(code_type *b, complex_type c, value_type precision) {
+		b[0] = (c.real() > value_type(0)) ? code_type(1) : code_type(-1);
+        b[1] = (abs(c.real()) < 4 * LEVEL) ? code_type(1) : code_type(-1); 
+        b[2] = ((abs(c.real()) < 6 * LEVEL) && (abs(c.real()) > 2 * LEVEL)) ? code_type(1) : code_type(-1); 
+        b[3] = (c.imag() > value_type(0)) ? code_type(1) : code_type(-1); 
+        b[4] = (abs(c.imag()) < 4 * LEVEL ) ? code_type(1) : code_type(-1);
+        b[5] = b[2] = ((abs(c.real()) < 6 * LEVEL) && (abs(c.real()) > 2 * LEVEL)) ? code_type(1) : code_type(-1); 
+	}
+
+	static complex_type map(code_type *b) {
+        uint8_t index = 0;
+        for (int i = 0; i < BITS; i++) {
+            if (b[i] > code_type(0)) {
+                index |= 1 << i;
+            }
+        }
+        complex_type ret = qam64[index];
+        return ret;
+	}
+};
