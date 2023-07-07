@@ -179,6 +179,9 @@ class Decoder : public DecoderInterface {
 			case 16:
 				return QAM<16, cmplx, code_type>::map(b);
 				break;
+			case 64:
+				return QAM<64, cmplx, code_type>::map(b);
+				break;
 			default:
 				return PhaseShiftKeying<4, cmplx, code_type>::map(b);
 				break;
@@ -199,6 +202,9 @@ class Decoder : public DecoderInterface {
 			case 16:
 				return QAM<16, cmplx, code_type>::hard(b, c);
 				break;
+			case 64:
+				return QAM<64, cmplx, code_type>::hard(b, c);
+				break;
 			default:
 				return PhaseShiftKeying<4, cmplx, code_type>::hard(b, c);
 				break;
@@ -218,6 +224,9 @@ class Decoder : public DecoderInterface {
 				break;
 			case 16:
 				return QAM<16, cmplx, code_type>::soft(b, c, precision);
+				break;
+			case 64:
+				return QAM<64, cmplx, code_type>::soft(b, c, precision);
 				break;
 			default:
 				return PhaseShiftKeying<4, cmplx, code_type>::soft(b, c, precision);
