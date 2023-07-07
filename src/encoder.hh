@@ -130,6 +130,9 @@ class Encoder : public EncoderInterface {
 			case 64:
 				return QAM<64, cmplx, code_type>::map(b);
 				break;
+			case 64:
+				return QAM<64, cmplx, code_type>::map(b);
+				break;
 			default:
 				return PhaseShiftKeying<4, cmplx, code_type>::map(b);
 				break;

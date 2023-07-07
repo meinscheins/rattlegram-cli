@@ -69,7 +69,6 @@ template <typename TYPE, typename CODE>
 struct QuadratureAmplitudeModulation<64, TYPE, CODE>
 {
 	static const int NUM = 64;
-
 	static const int BITS = 6;
 	typedef TYPE complex_type;
 	typedef typename TYPE::value_type value_type;
