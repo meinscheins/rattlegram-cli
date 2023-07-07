@@ -65,6 +65,9 @@ int main(int argc, char **argv) {
 				case 16:
                     decoder = new(std::nothrow) Decoder<8000, 16>;
                     break;
+				case 64:
+                    decoder = new(std::nothrow) Decoder<8000, 64>;
+                    break;
                 default:
                     std::cerr << "Unsupported symbol mapping." ;
                     std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;
