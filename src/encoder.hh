@@ -47,7 +47,7 @@ struct EncoderInterface {
 	virtual ~EncoderInterface() = default;
 };
 
-template<int RATE, int SYMBOL_MAPPING>
+template<int RATE, int SYMBOL_MAPPING, int GUARD_LENGTH>
 class Encoder : public EncoderInterface {
 	typedef DSP::Complex<float> cmplx;
 	typedef DSP::Const<float> Const;
@@ -58,7 +58,7 @@ class Encoder : public EncoderInterface {
 	static const int symbol_count = (SYMBOL_MAPPING == 2)? 8 : 4;
 	static const int code_len = 1 << code_order;
 	static const int symbol_length = (1280 * RATE) / 8000;
-	static const int guard_length = symbol_length / 8;
+	static const int guard_length = symbol_length / GUARD_LENGTH;
 	static const int extended_length = symbol_length + guard_length;
 	static const int max_bits = 1360;
 	static const int cor_seq_len = 127;

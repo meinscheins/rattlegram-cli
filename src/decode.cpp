@@ -6,15 +6,18 @@
 static DecoderInterface *decoder;
 
 int main(int argc, char **argv) {
-	if (argc < 3 || argc > 4) {
-        std::cerr << "usage: " << argv[0] << " FILE CHANNEL [MAPPING]" << std::endl;
+	if (argc < 4 || argc > 5) {
+        std::cerr << "usage: " << argv[0] << " FILE CHANNEL [MAPPING] [GUARD LENGTH]" << std::endl;
         return 1;
     }
 	const char* input_name = argv[1];
 	int channel = std::atoi(argv[2]);
 	int psk = 4;
+	int guard_length_fraction = 8;
 	if (argc > 3)
 		psk = std::atoi(argv[3]);
+	if (argc > 4)
+		psk = std::atoi(argv[4]);
 	AudioFile<int16_t> audioFile;
 	audioFile.load(input_name);
 	int rate = audioFile.getSampleRate();
@@ -54,16 +57,96 @@ int main(int argc, char **argv) {
         case 8000:
             switch (psk) {
                 case 2:
-                    decoder = new(std::nothrow) Decoder<8000, 2>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<8000, 2, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<8000, 2, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<8000, 2, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<8000, 2, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<8000, 2, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 case 4:
-                    decoder = new(std::nothrow) Decoder<8000, 4>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<8000, 4, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<8000, 4, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<8000, 4, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<8000, 4, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<8000, 4, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 case 8:
-                    decoder = new(std::nothrow) Decoder<8000, 8>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<8000, 8, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<8000, 8, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<8000, 8, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<8000, 8, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<8000, 8, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
-				case 16:
-                    decoder = new(std::nothrow) Decoder<8000, 16>;
+                case 16:
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<8000, 16, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<8000, 16, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<8000, 16, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<8000, 16, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<8000, 16, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 default:
                     std::cerr << "Unsupported symbol mapping." ;
@@ -74,16 +157,96 @@ int main(int argc, char **argv) {
         case 16000:
             switch (psk) {
                 case 2:
-                    decoder = new(std::nothrow) Decoder<16000, 2>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<16000, 2, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<16000, 2, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<16000, 2, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<16000, 2, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<16000, 2, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 case 4:
-                    decoder = new(std::nothrow) Decoder<16000, 4>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<16000, 4, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<16000, 4, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<16000, 4, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<16000, 4, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<16000, 4, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 case 8:
-                    decoder = new(std::nothrow) Decoder<16000, 8>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<16000, 8, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<16000, 8, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<16000, 8, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<16000, 8, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<16000, 8, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
-				case 16:
-                    decoder = new(std::nothrow) Decoder<16000, 16>;
+                case 16:
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<16000, 16, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<16000, 16, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<16000, 16, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<16000, 16, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<16000, 16, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 default:
                     std::cerr << "Unsupported symbol mapping." ;
@@ -94,16 +257,96 @@ int main(int argc, char **argv) {
         case 32000:
             switch (psk) {
                 case 2:
-                    decoder = new(std::nothrow) Decoder<32000, 2>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<32000, 2, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<32000, 2, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<32000, 2, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<32000, 2, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<32000, 2, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 case 4:
-                    decoder = new(std::nothrow) Decoder<32000, 4>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<32000, 4, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<32000, 4, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<32000, 4, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<32000, 4, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<32000, 4, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 case 8:
-                    decoder = new(std::nothrow) Decoder<32000, 8>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<32000, 8, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<32000, 8, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<32000, 8, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<32000, 8, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<32000, 8, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
-				case 16:
-                    decoder = new(std::nothrow) Decoder<32000, 16>;
+                case 16:
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<32000, 16, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<32000, 16, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<32000, 16, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<32000, 16, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<32000, 16, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 default:
                     std::cerr << "Unsupported symbol mapping." ;
@@ -114,16 +357,96 @@ int main(int argc, char **argv) {
         case 44100:
             switch (psk) {
                 case 2:
-                    decoder = new(std::nothrow) Decoder<44100, 2>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<44100, 2, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<44100, 2, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<44100, 2, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<44100, 2, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<44100, 2, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 case 4:
-                    decoder = new(std::nothrow) Decoder<44100, 4>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<44100, 4, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<44100, 4, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<44100, 4, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<44100, 4, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<44100, 4, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 case 8:
-                    decoder = new(std::nothrow) Decoder<44100, 8>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<44100, 8, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<44100, 8, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<44100, 8, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<44100, 8, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<44100, 8, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
-				case 16:
-                    decoder = new(std::nothrow) Decoder<44100, 16>;
+                case 16:
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<44100, 16, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<44100, 16, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<44100, 16, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<44100, 16, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<44100, 16, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 default:
                     std::cerr << "Unsupported symbol mapping." ;
@@ -134,16 +457,96 @@ int main(int argc, char **argv) {
         case 48000:
             switch (psk) {
                 case 2:
-                    decoder = new(std::nothrow) Decoder<48000, 2>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<48000, 2, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<48000, 2, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<48000, 2, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<48000, 2, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<48000, 2, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 case 4:
-                    decoder = new(std::nothrow) Decoder<48000, 4>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<48000, 4, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<48000, 4, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<48000, 4, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<48000, 4, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<48000, 4, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 case 8:
-                    decoder = new(std::nothrow) Decoder<48000, 8>;
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<48000, 8, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<48000, 8, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<48000, 8, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<48000, 8, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<48000, 8, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
-				case 16:
-                    decoder = new(std::nothrow) Decoder<44100, 16>;
+                case 16:
+                    switch (guard_length_fraction) {
+                        case 1:
+                            decoder = new(std::nothrow) Decoder<48000, 16, 1>();
+                            break;
+                        case 2:
+                            decoder = new(std::nothrow) Decoder<48000, 16, 2>();
+                            break;
+                        case 4:
+                            decoder = new(std::nothrow) Decoder<48000, 16, 4>();
+                            break;
+                        case 8:
+                            decoder = new(std::nothrow) Decoder<48000, 16, 8>();
+                            break;
+                        case 16:
+                            decoder = new(std::nothrow) Decoder<48000, 16, 16>();
+                            break;
+                        default:
+                            std::cerr << "Unsupported guard length." ;
+                            std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
+                            return 1;
+                    }
                     break;
                 default:
                     std::cerr << "Unsupported symbol mapping." ;
@@ -156,7 +559,7 @@ int main(int argc, char **argv) {
             std::cerr << "Supported rates: 8000/16000/32000/44100/48000."<< std::endl;
             return 1;
     }
-    
+ 
 
 	for (int i = 0; i * record_count * channel_count < file_length; i++) {
 		if (decoder->feed(&file[i*record_count*channel_count], record_count, channel)) {
