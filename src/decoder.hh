@@ -70,7 +70,7 @@ struct DecoderInterface {
 	virtual ~DecoderInterface() = default;
 };
 
-template<int RATE, int SYMBOL_MAPPING>
+template<int RATE, int SYMBOL_MAPPING, int GUARD_LENGTH>
 class Decoder : public DecoderInterface {
 	typedef DSP::Complex<float> cmplx;
 	typedef DSP::Const<float> Const;
@@ -83,7 +83,7 @@ class Decoder : public DecoderInterface {
 	static const int symbol_count = (SYMBOL_MAPPING == 2)? 8 : 4;
 	static const int code_len = 1 << code_order;
 	static const int symbol_length = (1280 * RATE) / 8000;
-	static const int guard_length = symbol_length / 8;
+	static const int guard_length = symbol_length / GUARD_LENGTH;
 	static const int extended_length = symbol_length + guard_length;
 	static const int filter_length = (((33 * RATE) / 8000) & ~3) | 1;
 	static const int stft_length = extended_length / 2;
