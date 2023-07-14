@@ -41,10 +41,10 @@ int main(int argc, char **argv) {
 	int extended_length = symbol_length + guard_length;
 	int record_count = rate/50;
 
-	int16_t file[file_length + record_count];
-	for (int i = 0; i < file_length + record_count; i++) {
-		file[i] = 0;
-	}
+	int16_t file[file_length + 11 * record_count];
+	//for (int i = 0; i < file_length + record_count; i++) {
+	//	file[i] = 0;
+	//}
 	for (int i = 0; i < file_length/channel_count; i++) {
 		for (int c = 0; c < channel_count; c++) {
 			file[i * channel_count + c] = audioFile.samples[c][i];
@@ -158,16 +158,14 @@ int main(int argc, char **argv) {
     }
     
 
-	for (int i = 0; i * record_count * channel_count < file_length; i++) {
+	for (int i = 0; i * record_count * channel_count < file_length + 10 * record_count; i++) {
 		if (decoder->feed(&file[i*record_count*channel_count], record_count, channel)) {
 			int status = decoder->process();
 			float cfo = -1.0;
 			int32_t mode = -1;
 			uint8_t call_sign[192] = {0}; 
-			uint8_t payload[192] = {0};
-			std::string call;
-			std::string pay;
-
+			uint8_t payload[170] = {0};
+ 
 			switch (status) {
 				case 0:
 					break;
@@ -176,21 +174,19 @@ int main(int argc, char **argv) {
 					break;
 				case 2:
 					decoder->staged(&cfo, &mode, call_sign);
-					call = (reinterpret_cast<char*>(call_sign));
 					std::cout << "SYNC:" << std::endl 
 							<< "CFO: " 
 							<< cfo << std::endl 
 							<< "Mode: "
 							<< mode << std::endl 
 							<< "Call sign: "
-							<< call
+							<< (reinterpret_cast<char*>(call_sign))
 							<< std::endl;
 					break;
 				case 3:
-					decoder->fetch(payload);
-					pay = (reinterpret_cast<char*>(payload));
+					std::cout << "Bit flips: " << decoder->fetch(payload) << std::endl;
 					std::cout << "DONE:  payload: " 
-							<< pay
+							<< (reinterpret_cast<char*>(payload))
 							<< std::endl;
 					break;
 				case 4:
@@ -198,26 +194,24 @@ int main(int argc, char **argv) {
 					break;
 				case 5:
 					decoder->staged(&cfo, &mode, call_sign);
-					call = (reinterpret_cast<char*>(call_sign));
 					std::cout << "NOPE:"
 							<< "  CFO "
 							<< cfo
 							<< "  mode: "
 							<< mode
 							<< "  call sign: "
-							<< call
+							<< (reinterpret_cast<char*>(call_sign))
 							<< std::endl;
 					break;
 				case 6: 
 					decoder->staged(&cfo, &mode, call_sign);
-					call = (reinterpret_cast<char*>(call_sign));
 					std::cout << "PING:"
 							<< "  CFO "
 							<< cfo
 							<< "  mode: "
 							<< mode
 							<< "  call sign: "
-							<< call
+							<< (reinterpret_cast<char*>(call_sign))
 							<< std::endl;
 					break;
 				default:
@@ -227,12 +221,6 @@ int main(int argc, char **argv) {
 			}
 		}
 	}
-	uint8_t payload[192] = {0};
-	std::string payload_str;
-	decoder->fetch(payload);
-	payload_str = (reinterpret_cast<char*>(payload));
-	std::cout << "Payload: " 
-			<< payload_str
-			<< std::endl;
+
     return 0;
 }

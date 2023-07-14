@@ -413,6 +413,7 @@ public:
 		int len = 0;
 		while (len <= 128 && payload[len])
 			++len;
+		std::cout << "Message length :" << len << std::endl;
 		if (!len)
 			operation_mode = 0;
 		else if (len <= 85)

@@ -156,7 +156,7 @@ int main(int argc, char **argv) {
         noise_symbols, 
         false);
     //not sure how often to iterate. up to testing
-    for (int i = 0; i < 10 + noise_symbols; ++i) {
+    for (int i = 0; i < 12 + noise_symbols; ++i) {
         encoder->produce_write(channel);
 	}
 
