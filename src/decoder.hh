@@ -453,7 +453,6 @@ public:
 				demap();
 			}
 			if (++symbol_number == symbol_count)
-				//std::cout << "Symbol: " << symbol_number <<"/" << symbol_count <<  std::endl;
 				status = STATUS_DONE;
 			for (int i = 0; i < pay_car_cnt; ++i)
 				prev[i] = freq[bin(i + pay_car_off)];
