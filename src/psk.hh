@@ -63,16 +63,19 @@ struct PhaseShiftKeying<4, TYPE, CODE> {
 	}
 
 	static void hard(code_type *b, complex_type c) {
+		//std::cout << "Symbol: " << c.real() << " + " << c.imag() << "i" << std::endl; 
 		b[0] = c.real() < value_type(0) ? code_type(-1) : code_type(1);
 		b[1] = c.imag() < value_type(0) ? code_type(-1) : code_type(1);
 	}
 
 	static void soft(code_type *b, complex_type c, value_type precision) {
+		std::cout << "Symbol: " << c.real() << " + " << c.imag() << "i" << std::endl; 
 		b[0] = quantize(precision, c.real());
 		b[1] = quantize(precision, c.imag());
 	}
 
 	static complex_type map(code_type *b) {
+		//std::cout << "Symbol: " << b[0] << " + " << b[1] << "i" << std::endl; 
 		return rcp_sqrt_2 * complex_type(b[0], b[1]);
 	}
 };
@@ -104,12 +107,14 @@ struct PhaseShiftKeying<8, TYPE, CODE> {
 	}
 
 	static void hard(code_type *b, complex_type c) {
+		//std::cout << "Symbol: " << c.real() << " + " << c.imag() << "i" << std::endl; 
 		b[1] = c.real() < value_type(0) ? code_type(-1) : code_type(1);
 		b[2] = c.imag() < value_type(0) ? code_type(-1) : code_type(1);
 		b[0] = std::abs(c.real()) < std::abs(c.imag()) ? code_type(-1) : code_type(1);
 	}
 
 	static void soft(code_type *b, complex_type c, value_type precision) {
+		std::cout << "Symbol: " << c.real() << " + " << c.imag() << "i" << std::endl; 
 		b[1] = quantize(precision, c.real());
 		b[2] = quantize(precision, c.imag());
 		b[0] = quantize(precision, rcp_sqrt_2 * (std::abs(c.real()) - std::abs(c.imag())));
@@ -120,6 +125,7 @@ struct PhaseShiftKeying<8, TYPE, CODE> {
 		value_type imag = sin_pi_8;
 		if (b[0] < code_type(0))
 			std::swap(real, imag);
+		std::cout << "Symbol: " << real * b[1] << " + " << imag * b[2] << "i" << std::endl; 
 		return complex_type(real * b[1], imag * b[2]);
 	}
 };
