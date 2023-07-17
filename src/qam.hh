@@ -51,9 +51,9 @@ struct QAM<16, TYPE, CODE> {
 
 	static void soft(code_type *b, complex_type c, value_type precision) {
 		b[0] = quantize(precision, c.real());
-        b[1] = quantize(precision, DIST * (value_type(DIST) - abs(c.real())));
+        b[1] = quantize(precision, (value_type(DIST) - abs(c.real())));
         b[2] = quantize(precision, c.imag());
-        b[3] = quantize(precision, DIST * (value_type(DIST) - abs(c.imag())));
+        b[3] = quantize(precision, (value_type(DIST) - abs(c.imag())));
 	}
 
 	static complex_type map(code_type *b) {
