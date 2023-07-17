@@ -122,10 +122,10 @@ class Encoder : public EncoderInterface {
 				return PhaseShiftKeying<8, cmplx, code_type>::map(b);
 				break;
 			case 16:
-				return QAM<16, cmplx, code_type>::map(b);
+				return QuadratureAmplitudeModulation<16, cmplx, code_type>::map(b);
 				break;
 			case 64:
-				return QAM<64, cmplx, code_type>::map(b);
+				return QuadratureAmplitudeModulation<64, cmplx, code_type>::map(b);
 				break;
 			default:
 				return PhaseShiftKeying<4, cmplx, code_type>::map(b);
