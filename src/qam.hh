@@ -49,7 +49,6 @@ struct QuadratureAmplitudeModulation<16, TYPE, CODE>
 
 	static void soft(code_type *b, complex_type c, value_type precision)
 	{
-		std::cout << "Symbol: " << c.real() << " + " << c.imag() << "i" << std::endl; 
 		b[0] = quantize(precision, c.real());
 		b[1] = quantize(precision, c.imag());
 		b[2] = quantize(precision, std::abs(c.real())-amp(2));
@@ -105,7 +104,6 @@ struct QuadratureAmplitudeModulation<64, TYPE, CODE>
 
 	static void soft(code_type *b, complex_type c, value_type precision)
 	{
-		std::cout << "Symbol: " << c.real() << " + " << c.imag() << "i" << std::endl; 
 		b[0] = quantize(precision, c.real());
 		b[1] = quantize(precision, c.imag());
 		b[2] = quantize(precision, std::abs(c.real())-amp(4));
@@ -252,4 +250,3 @@ struct QuadratureAmplitudeModulation<1024, TYPE, CODE>
 };
 
 #endif
-
