@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
 	int extended_length = symbol_length + guard_length;
 	int record_count = rate/50;
 
-	int16_t file[file_length + 11 * record_count];
+	int16_t file[file_length + 22 * record_count];
 	//for (int i = 0; i < file_length + record_count; i++) {
 	//	file[i] = 0;
 	//}
@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
     }
     
 
-	for (int i = 0; i * record_count * channel_count < file_length + 10 * record_count; i++) {
+	for (int i = 0; i * record_count * channel_count < file_length + 10 * channel_count * record_count; i++) {
 		if (decoder->feed(&file[i*record_count*channel_count], record_count, channel)) {
 			int status = decoder->process();
 			float cfo = -1.0;
