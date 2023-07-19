@@ -370,9 +370,9 @@ int main(int argc, char **argv) {
                         case 8:
                             decoder = new(std::nothrow) Decoder<44100, 2, 8>();
                             break;
-                        case 16:
-                            decoder = new(std::nothrow) Decoder<44100, 2, 16>();
-                            break;
+                        //case 16:
+                        //    decoder = new(std::nothrow) Decoder<44100, 2, 16>();
+                        //    break;
                         default:
                             std::cerr << "Unsupported guard length." ;
                             std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
@@ -393,9 +393,9 @@ int main(int argc, char **argv) {
                         case 8:
                             decoder = new(std::nothrow) Decoder<44100, 4, 8>();
                             break;
-                        case 16:
-                            decoder = new(std::nothrow) Decoder<44100, 4, 16>();
-                            break;
+                        // case 16:
+                        //     decoder = new(std::nothrow) Decoder<44100, 4, 16>();
+                        //     break;
                         default:
                             std::cerr << "Unsupported guard length." ;
                             std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
@@ -416,9 +416,9 @@ int main(int argc, char **argv) {
                         case 8:
                             decoder = new(std::nothrow) Decoder<44100, 8, 8>();
                             break;
-                        case 16:
-                            decoder = new(std::nothrow) Decoder<44100, 8, 16>();
-                            break;
+                        //case 16:
+                        //    decoder = new(std::nothrow) Decoder<44100, 8, 16>();
+                        //    break;
                         default:
                             std::cerr << "Unsupported guard length." ;
                             std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
@@ -439,9 +439,9 @@ int main(int argc, char **argv) {
                         case 8:
                             decoder = new(std::nothrow) Decoder<44100, 16, 8>();
                             break;
-                        case 16:
-                            decoder = new(std::nothrow) Decoder<44100, 16, 16>();
-                            break;
+                        //case 16:
+                         //   decoder = new(std::nothrow) Decoder<44100, 16, 16>();
+                        //    break;
                         default:
                             std::cerr << "Unsupported guard length." ;
                             std::cerr << "Supported guard lengths: 1 (1), 1/2 (2), 1/4 (4), 1/8 (8) and 1/16 (16)"<< std::endl;
