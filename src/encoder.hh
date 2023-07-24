@@ -80,7 +80,7 @@ class Encoder : public EncoderInterface {
 	PolarEncoder<code_type> polar;
 	cmplx temp[extended_length], freq[symbol_length], prev[pay_car_cnt], guard[guard_length];
 	uint8_t mesg[max_bits / 8], call[9];
-	code_type code[code_len];
+	code_type code[code_len * 6];
 	uint64_t meta_data;
 	int operation_mode = 0;
 	int carrier_offset = 0;
@@ -455,6 +455,9 @@ public:
 		CODE::Xorshift32 scrambler;
 		for (int i = 0; i < data_bits / 8; ++i)
 			mesg[i] = payload[i] ^ scrambler();
+		for (int i = 0; i < code_len*6; i++) {
+			code[i] = 0;
+		}
 		polar(code, mesg, frozen_bits, data_bits);
 	}
 };
