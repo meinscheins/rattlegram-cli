@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
 	if (argc > 3)
 		psk = std::atoi(argv[3]);
 	if (argc > 4)
-		psk = std::atoi(argv[4]);
+		guard_length_fraction = std::atoi(argv[4]);
 	AudioFile<int16_t> audioFile;
 	audioFile.load(input_name);
 	int rate = audioFile.getSampleRate();
