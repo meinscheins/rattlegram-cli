@@ -42,7 +42,8 @@ int main(int argc, char **argv) {
 	int symbol_length = (1280 * rate) / 8000;
 	int guard_length = symbol_length / 8;
 	int extended_length = symbol_length + guard_length;
-	int record_count = rate/50;
+	//int record_count = rate/50;
+    int record_count = rate/10;
 
 	int16_t file[file_length + 22 * record_count];
 	//for (int i = 0; i < file_length + record_count; i++) {
