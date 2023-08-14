@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     if (argc > 9)
         guard_length_fraction = std::atoi(argv[9]);
     if (argc > 10)
-        out_file = argv[9];
+        out_file = argv[10];
 
     char message[192] = {0};
     for (int i = 0; i < mesg.length(); i++) {
