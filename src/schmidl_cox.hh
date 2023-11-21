@@ -38,7 +38,7 @@ class SchmidlCox {
 		if (!(norm(prev) > 0))
 			return 0;
 		cmplx cons = curr / prev;
-		if (!(norm(cons) <= 4))
+		if (!(norm(cons) <= 10))
 			return 0;
 		return cons;
 	}
