@@ -48,112 +48,26 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	switch (rate) {
-        case 8000:
-            switch (psk) {
-                case 2:
-                    decoder = new(std::nothrow) Decoder<8000, 2>;
-                    break;
-                case 4:
-                    decoder = new(std::nothrow) Decoder<8000, 4>;
-                    break;
-                case 8:
-                    decoder = new(std::nothrow) Decoder<8000, 8>;
-                    break;
-				case 16:
-                    decoder = new(std::nothrow) Decoder<8000, 16>;
-                    break;
-                default:
-                    std::cerr << "Unsupported symbol mapping." ;
-                    std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;
-                    return 1;
-            }
+    switch (psk) {
+        case 2:
+            decoder = new(std::nothrow) Decoder<8000, 2>;
             break;
-        case 16000:
-            switch (psk) {
-                case 2:
-                    decoder = new(std::nothrow) Decoder<16000, 2>;
-                    break;
-                case 4:
-                    decoder = new(std::nothrow) Decoder<16000, 4>;
-                    break;
-                case 8:
-                    decoder = new(std::nothrow) Decoder<16000, 8>;
-                    break;
-				case 16:
-                    decoder = new(std::nothrow) Decoder<16000, 16>;
-                    break;
-                default:
-                    std::cerr << "Unsupported symbol mapping." ;
-                    std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;
-                    return 1;
-            }
+        case 4:
+            decoder = new(std::nothrow) Decoder<8000, 4>;
             break;
-        case 32000:
-            switch (psk) {
-                case 2:
-                    decoder = new(std::nothrow) Decoder<32000, 2>;
-                    break;
-                case 4:
-                    decoder = new(std::nothrow) Decoder<32000, 4>;
-                    break;
-                case 8:
-                    decoder = new(std::nothrow) Decoder<32000, 8>;
-                    break;
-				case 16:
-                    decoder = new(std::nothrow) Decoder<32000, 16>;
-                    break;
-                default:
-                    std::cerr << "Unsupported symbol mapping." ;
-                    std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;
-                    return 1;
-            }
+        case 8:
+            decoder = new(std::nothrow) Decoder<8000, 8>;
             break;
-        case 44100:
-            switch (psk) {
-                case 2:
-                    decoder = new(std::nothrow) Decoder<44100, 2>;
-                    break;
-                case 4:
-                    decoder = new(std::nothrow) Decoder<44100, 4>;
-                    break;
-                case 8:
-                    decoder = new(std::nothrow) Decoder<44100, 8>;
-                    break;
-				case 16:
-                    decoder = new(std::nothrow) Decoder<44100, 16>;
-                    break;
-                default:
-                    std::cerr << "Unsupported symbol mapping." ;
-                    std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;
-                    return 1;
-            }
-            break;
-        case 48000:
-            switch (psk) {
-                case 2:
-                    decoder = new(std::nothrow) Decoder<48000, 2>;
-                    break;
-                case 4:
-                    decoder = new(std::nothrow) Decoder<48000, 4>;
-                    break;
-                case 8:
-                    decoder = new(std::nothrow) Decoder<48000, 8>;
-                    break;
-				case 16:
-                    decoder = new(std::nothrow) Decoder<44100, 16>;
-                    break;
-                default:
-                    std::cerr << "Unsupported symbol mapping." ;
-                    std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;
-                    return 1;
-            }
+		case 16:
+            decoder = new(std::nothrow) Decoder<8000, 16>;
             break;
         default:
-            std::cerr << "Unsupported sample rate." ;
-            std::cerr << "Supported rates: 8000/16000/32000/44100/48000."<< std::endl;
+            std::cerr << "Unsupported symbol mapping." ;
+            std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;
             return 1;
     }
+            
+  
     
 
 	for (int i = 0; i * record_count * channel_count < file_length + 10 * channel_count * record_count; i++) {
@@ -163,12 +77,31 @@ int main(int argc, char **argv) {
 			int32_t mode = -1;
 			uint8_t call_sign[192] = {0}; 
 			uint8_t payload[170] = {0};
+			int timestamp = i * record_count * channel_count/8000;
  
 			switch (status) {
 				case 0:
 					break;
 				case 1:
 					std::cout << "PREAMBLE FAIL" << std::endl;
+					switch (psk) {
+    				    case 2:
+    				        decoder = new(std::nothrow) Decoder<8000, 2>;
+    				        break;
+    				    case 4:
+    				        decoder = new(std::nothrow) Decoder<8000, 4>;
+    				        break;
+    				    case 8:
+    				        decoder = new(std::nothrow) Decoder<8000, 8>;
+    				        break;
+						case 16:
+    				        decoder = new(std::nothrow) Decoder<8000, 16>;
+    				        break;
+    				    default:
+    				        std::cerr << "Unsupported symbol mapping." ;
+    				        std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;
+    				        return 1;
+    				}
 					break;
 				case 2:
 					decoder->staged(&cfo, &mode, call_sign);
@@ -182,13 +115,49 @@ int main(int argc, char **argv) {
 							<< std::endl;
 					break;
 				case 3:
-					std::cout << "Bit flips: " << decoder->fetch(payload) << std::endl;
+					std::cout << "Time: " << timestamp << " Bit flips: " << decoder->fetch(payload) << std::endl;
 					std::cout << "DONE:  payload: " 
 							<< (reinterpret_cast<char*>(payload))
 							<< std::endl;
+					switch (psk) {
+    				    case 2:
+    				        decoder = new(std::nothrow) Decoder<8000, 2>;
+    				        break;
+    				    case 4:
+    				        decoder = new(std::nothrow) Decoder<8000, 4>;
+    				        break;
+    				    case 8:
+    				        decoder = new(std::nothrow) Decoder<8000, 8>;
+    				        break;
+						case 16:
+    				        decoder = new(std::nothrow) Decoder<8000, 16>;
+    				        break;
+    				    default:
+    				        std::cerr << "Unsupported symbol mapping." ;
+    				        std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;
+    				        return 1;
+    				}
 					break;
 				case 4:
 					std::cout << "HEAP ERROR" << std::endl;
+					switch (psk) {
+    				    case 2:
+    				        decoder = new(std::nothrow) Decoder<8000, 2>;
+    				        break;
+    				    case 4:
+    				        decoder = new(std::nothrow) Decoder<8000, 4>;
+    				        break;
+    				    case 8:
+    				        decoder = new(std::nothrow) Decoder<8000, 8>;
+    				        break;
+						case 16:
+    				        decoder = new(std::nothrow) Decoder<8000, 16>;
+    				        break;
+    				    default:
+    				        std::cerr << "Unsupported symbol mapping." ;
+    				        std::cerr << "Supported PSK: 2/4/8. Supported QAM: 16."<< std::endl;
+    				        return 1;
+    				}
 					break;
 				case 5:
 					decoder->staged(&cfo, &mode, call_sign);
